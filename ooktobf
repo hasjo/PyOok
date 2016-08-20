@@ -1,0 +1,30 @@
+#!/usr/bin/python
+
+import sys
+
+ooklist = ('Ook. Ook?', 'Ook? Ook.', 'Ook. Ook.', 'Ook! Ook!', 'Ook. Ook!', 'Ook! Ook.', 'Ook! Ook?', 'Ook? Ook!')
+bflist = ('>', '<', '+', '-', ',', '.', '[', ']')
+
+with open(sys.argv[1], 'r') as readfile:
+    filecont = readfile.read()
+
+linelist = filecont.split('\n')
+for line in linelist:
+    words = line.split(' ')
+    if '' in words:
+        words.remove('')
+    listlen = len(words)
+    outline = ''
+    if words != ['']:
+        if listlen % 2 != 0:
+            print("Syntax Error - There are an odd number of words in this line")
+            print("Line - " + line)
+            sys.exit()
+        loc = 0
+        bfout = ''
+        while loc < listlen:
+            command = words[loc] + ' ' + words[loc + 1]
+            index = ooklist.index(command)
+            bfout += bflist[index]
+            loc = loc + 2
+        print(bfout)

@@ -1,0 +1,19 @@
+#!/usr/bin/python
+
+import sys
+
+ooklist = ('Ook. Ook?', 'Ook? Ook.', 'Ook. Ook.', 'Ook! Ook!', 'Ook. Ook!', 'Ook! Ook.', 'Ook! Ook?', 'Ook? Ook!')
+bflist = ('>', '<', '+', '-', ',', '.', '[', ']')
+
+with open(sys.argv[1], 'r') as readfile:
+    filecont = readfile.read()
+
+linelist = filecont.split('\n')
+for line in linelist:
+    ookout = ''
+    for c in line:
+        if c != ' ':
+            index = bflist.index(c)
+            ookout += ooklist[index] + ' '
+    if line != '':
+        print(ookout)

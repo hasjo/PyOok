@@ -1,0 +1,81 @@
+#!/usr/bin/python
+
+import sys
+
+
+class ookint(object):
+
+    def __init__(self):
+        self.ooklist = ('Ook. Ook?', 'Ook? Ook.', 'Ook. Ook.', 'Ook! Ook!', 'Ook. Ook!', 'Ook! Ook.', 'Ook! Ook?', 'Ook? Ook!')
+        with open(sys.argv[1], 'r') as readfile:
+            filecont = readfile.read()
+
+        self.data = [0]
+        self.dataloc = 0
+        self.commandlist = []
+        self.commandloc = 0
+        linelist = filecont.split('\n')
+        command = ''
+        for line in linelist:
+            words = line.split(' ')
+            for item in words:
+                if item.startswith('Ook'):
+                    if command != '':
+                        command += ' '
+                    command += item
+                    if ' ' in command:
+                        if command in self.ooklist:
+                            self.commandlist.append(command)
+                            command = ''
+
+    def executeook(self, commands):
+        x = 0
+        while x < len(commands):
+            #Shift right a cell
+            if commands[x] == 'Ook. Ook?':
+                if self.dataloc + 1 == len(self.data):
+                    self.data.append(0)
+                    self.dataloc += 1
+                else:
+                    self.dataloc += 1
+            
+            #Shift left a cell
+            if commands[x] == 'Ook? Ook.':
+                if self.dataloc != 0:
+                    self.dataloc -= 1
+
+            #Increment current cell
+            if commands[x] == 'Ook. Ook.':
+                self.data[self.dataloc] += 1
+
+            #Decrement current cell
+            if commands[x] == 'Ook! Ook!':
+                if self.data[self.dataloc] > 0:
+                    self.data[self.dataloc] -= 1
+
+            #Read stdin and set value at current cell
+            if commands[x] == 'Ook. Ook!':
+                userin = input('Enter Char: ')
+                userin = userin[:1]
+                if userin != '':
+                    self.data[self.dataloc] = ord(userin)
+
+            #Write ascii value of current cell
+            if commands[x] == 'Ook! Ook.':
+                print(chr(self.data[self.dataloc]), end='')
+
+            #Handle a loop
+            if commands[x] == 'Ook! Ook?':
+                looplist = []
+                looploc = self.dataloc
+                x += 1
+                while commands[x] != 'Ook? Ook!':
+                    looplist.append(commands[x])
+                    x += 1
+                while self.data[looploc] != 0:
+                    self.executeook(looplist)
+
+            x += 1
+
+RunOok = ookint()
+RunOok.executeook(RunOok.commandlist)
